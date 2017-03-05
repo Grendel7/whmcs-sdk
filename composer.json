@@ -1,0 +1,20 @@
+{
+  "name": "HansAdema/whmcs-sdk",
+  "description": "Simple OOP wrapper for the WHMCS API",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Hans Adema",
+      "email": "hans@hansadema.nl"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "HansAdema\\WhmcsSdk\\" : "src/"
+    }
+  },
+  "require": {
+    "guzzlehttp/guzzle": "~6.0"
+  }
+}
