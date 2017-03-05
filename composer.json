@@ -1,5 +1,5 @@
 {
-  "name": "HansAdema/whmcs-sdk",
+  "name": "hansadema/whmcs-sdk",
   "description": "Simple OOP wrapper for the WHMCS API",
   "minimum-stability": "stable",
   "license": "MIT",
