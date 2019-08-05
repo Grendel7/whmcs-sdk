@@ -31,18 +31,56 @@ class Client
     protected $url;
 
     /**
+     * @var boon is WHCMS verison 7.2 or newer
+     */
+    protected $v7_2_plus;
+
+    /**
      * Api constructor.
      * @param string $url The WHMCS installation URL
      * @param string $username The WHMCS API username
      * @param string $password The WHMCS API password
      */
-    public function __construct($url, $username, $password)
+    public function __construct($url, $username, $password, $v7_2_plus = true)
     {
+
+        if(!endsWith($url, "/"))
+        {
+            $url += "/";
+        }
         $this->url = $url;
         $this->username = $username;
-        $this->password = md5($password);
+        if($v7_2_plus)
+        {
+            $this->password = $password;
+        }
+        else {
+            $this->password = md5($password);
+        }
 
         $this->http = new Guzzle(['base_uri' => $url . 'includes/api.php']);
+    }
+
+    public function endsWith($haystack, $needle) {
+        return substr_compare($haystack, $needle, -strlen($needle)) === 0;
+    }
+
+    public function auth_array()
+    {
+
+        if($this->v7_2_plus)
+        {
+            return [
+                'identifier' => $this->username,
+                'secret' => $this->password,
+            ];
+        }
+
+        return [
+            'username' => $this->username,
+            'password' => $this->password,
+        ];
+
     }
 
     /**
@@ -58,11 +96,9 @@ class Client
         try {
             $response = $this->http->post('', [
                 'form_params' => array_merge($params, [
-                    'username' => $this->username,
-                    'password' => $this->password,
                     'action' => $action,
                     'responsetype' => 'json',
-                ]),
+                ], $this->auth_array()),
             ]);
         } catch (ClientException $e) {
             throw new RequestException($e->getResponse());
